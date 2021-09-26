@@ -5,13 +5,14 @@ const { pool } = require('../db/index.js');
 
   const placesTable = `
     CREATE TABLE IF NOT EXISTS places (
-      id              INT     PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
-      street           VARCHAR(50) NOT NULL,      
-      town         VARCHAR(50) NOT NULL,
-      province       VARCHAR(50) NOT NULL,
-      filename        VARCHAR(255),
-      filepath          VARCHAR(255)
-      
+      id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
+      lat VARCHAR(255),
+      long VARCHAR(255),
+      street VARCHAR(50) NOT NULL,      
+      town VARCHAR(50) NOT NULL,
+      province VARCHAR(50) NOT NULL,
+      filename VARCHAR(255),
+      filepath VARCHAR(255)
     );
   `
 
