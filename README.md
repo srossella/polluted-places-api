@@ -26,6 +26,5 @@ You can use various HTTP clients such as [Postman](https://www.postman.com/) to 
 
 ## Options for Extension
 - Add additional API endpoints 
-- Add front-end
 - Add separate related tables and constraints
 - Add geolocation as an alternative to the address
