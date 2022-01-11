@@ -8,6 +8,7 @@ const { pool } = require('../db/index.js');
       id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY NOT NULL,
       lat VARCHAR(255),
       long VARCHAR(255),
+      date VARCHAR(255) NOT NULL,
       street VARCHAR(50) NOT NULL,      
       town VARCHAR(50) NOT NULL,
       province VARCHAR(50) NOT NULL,

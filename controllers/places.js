@@ -8,7 +8,7 @@ const options = {
  
 const geocoder = NodeGeocoder(options);
  
-
+// GET all places in db
 const getPlaces = (request, response) => {
     pool.query('SELECT * FROM places ', (error, results) => {
       if (error) {
@@ -17,15 +17,16 @@ const getPlaces = (request, response) => {
       response.status(200).json(results.rows)
     })
   }
-
-  const createPlace = (request, response) => {
-    if ( !request.file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+// POST a new place 
+// node geocoder is used to get coordinates of the place
+const createPlace = (request, response) => {
+    if ( !request.file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|ico|ICO)$/)) {
       response.send({ msg:'Only image files (jpg, jpeg, png) are allowed!'})
     };
-  
+    const date = new Date().toLocaleDateString();
     const { filename } = request.file || '';
     const filepath = request.file.path || '';
-  
+    
     const { street, town, province } = request.body
     let lat=''
     let long=''
@@ -40,7 +41,7 @@ const getPlaces = (request, response) => {
             return { lat, long }
           })
           .then( coo => {
-            pool.query('INSERT INTO places ( lat, long, street, town, province, filename, filepath) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [ coo.lat, coo.long, street, town, province, filename, filepath], (error, results) => {
+            pool.query('INSERT INTO places ( lat, long, street, town, province, filename, filepath, date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *', [ coo.lat, coo.long, street, town, province, filename, filepath, date], (error, results) => {
             if (error) {
               throw error
             } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
@@ -57,7 +58,7 @@ const getPlaces = (request, response) => {
    
   
   }
-
+// GET a specific place given an id
   const getPlaceById = (request, response) => {
     const id = parseInt(request.params.id)
   
@@ -66,13 +67,30 @@ const getPlaces = (request, response) => {
         throw error
       }
       if ( results.rows.length == 0) {
-        response.status(404).send(`Resource not found`);
+        response.status(200).json([]);
       } else{
            response.status(200).json(results.rows)
       }
     })
   }
 
+// GET a specific place given a town name
+  const getPlaceByTown = (request, response) => {
+    console.log(request)
+    const town = request.params.town
+  
+    pool.query('SELECT * FROM places WHERE town = $1', [town], (error, results) => {
+      if (error) {
+        throw error
+      }
+      if ( results.rows.length == 0) {
+        response.status(200).json([]);
+      } else{
+           response.status(200).json(results.rows)
+      }
+    })
+  }
+// PUT update a specific place given an id
   const updatePlace = (request, response) => {
     if ( !request.file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
       response.status(404).send({ msg:'Only image files (jpg, jpeg, png) are allowed!'})
@@ -80,7 +98,7 @@ const getPlaces = (request, response) => {
     
     const id = parseInt(request.params.id)
     const { street, town, province } = request.body
-    
+    const date = new Date().toLocaleDateString()
     const {filename}  = request.file || '';
     const filepath = request.file.path || ''; 
     
@@ -98,8 +116,8 @@ const getPlaces = (request, response) => {
           })
           .then( coo => {
               pool.query(
-                'UPDATE places SET street = $1, town = $2, province = $3, lat = $4, long = $5, filename=$6, filepath=$7 WHERE id = $8 RETURNING *',
-                [street, town, province, coo.lat, coo.long, filename, filepath, id],
+                'UPDATE places SET street = $1, town = $2, province = $3, lat = $4, long = $5, filename=$6, filepath=$7, date=$8 WHERE id = $9 RETURNING *',
+                [street, town, province, coo.lat, coo.long, filename, filepath, date, id],
                 (error, results) => {
                   if (error) {
                     throw error
@@ -118,7 +136,7 @@ const getPlaces = (request, response) => {
             console.log(err);
           })
   }
-
+// DELETE a specific place given an id
   const deletePlace = (request, response) => {
     const id = parseInt(request.params.id)
   
@@ -141,7 +159,8 @@ const getPlaces = (request, response) => {
     createPlace,
     deletePlace,
     updatePlace,
-    getPlaceById
+    getPlaceById,
+    getPlaceByTown
   }
 
 
