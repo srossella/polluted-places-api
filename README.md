@@ -38,3 +38,15 @@ You can use various HTTP clients such as [Postman](https://www.postman.com/) to 
 - Add additional API endpoints 
 - Add separate related tables and constraints in the database
 - Add geolocation as an alternative to the address
+
+## License
+
+Distributed under the MIT License. 
+
+## Contact
+
+Rossella Salaro - rossella.salaro@gmail.com
+
+## Acknowledgements
+
+* [Start2impact](http://start2impact.com/)
