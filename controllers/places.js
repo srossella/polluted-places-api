@@ -18,7 +18,7 @@ const getPlaces = (request, response) => {
     })
   }
 // POST a new place 
-// node geocoder is used to get coordinates of the place
+// node geocoder is used to get the coordinates of the place
 const createPlace = (request, response) => {
     if ( !request.file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|ico|ICO)$/)) {
       response.send({ msg:'Only image files (jpg, jpeg, png) are allowed!'})
