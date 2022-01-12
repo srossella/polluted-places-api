@@ -32,12 +32,12 @@ const createPlace = (request, response) => {
     let long=''
     geocoder.geocode(street+' '+town+' '+province)
           .then( res => {
-            console.log(res)
+            // console.log(res)
             if(res.length > 0){
                lat = res[0].latitude || '';
                long = res[0].longitude || '';
             }
-            console.log(lat + ' ' + long);
+            // console.log(lat + ' ' + long);
             return { lat, long }
           })
           .then( coo => {
@@ -51,7 +51,7 @@ const createPlace = (request, response) => {
             }) 
           })
           .catch((err)=> {
-            console.log(err);
+            // console.log(err);
             response.status(404).send('an error has occured') 
           })
     
@@ -76,7 +76,7 @@ const createPlace = (request, response) => {
 
 // GET a specific place given a town name
   const getPlaceByTown = (request, response) => {
-    console.log(request)
+    // console.log(request)
     const town = request.params.town
   
     pool.query('SELECT * FROM places WHERE town = $1', [town], (error, results) => {
@@ -111,7 +111,7 @@ const createPlace = (request, response) => {
               lat = res[0].latitude || '';
               long = res[0].longitude || '';
            }
-            console.log(lat+' '+long);
+            // console.log(lat+' '+long);
             return { lat, long }
           })
           .then( coo => {
@@ -133,7 +133,7 @@ const createPlace = (request, response) => {
               )
           })
           .catch((err)=> {
-            console.log(err);
+            // console.log(err);
           })
   }
 // DELETE a specific place given an id
